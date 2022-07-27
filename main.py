@@ -3,17 +3,23 @@ import requests
 import bs4
 import pyttsx3
 engine=pyttsx3.init()
-
+import time
 
 def question():
-
     r = sr.Recognizer()
     print('say your question into your mic...')
     with sr.Microphone() as source:
         print('What can I do for you today?')
         audio = r.listen(source)
         r.adjust_for_ambient_noise(source, duration=1)
-    text= r.recognize_google(audio)
+
+    try:
+        text = r.recognize_google(audio)
+        pass
+    except sr.UnknownValueError:
+        question()
+    except sr.RequestError as e:
+        print(f"Could not request results from Google Speech Recognition service;{0}".format(e))
     print(text)
     if text=='what is your name':
         a='Im Ike, your personal assistant!'
