@@ -1,9 +1,6 @@
-import speech_recognition as sr
-import requests
-import bs4
-import pyttsx3
+import speech_recognition as sr,requests,bs4,pyttsx3,wikipedia,time
+
 engine=pyttsx3.init()
-import time
 
 def question():
     r = sr.Recognizer()
@@ -14,6 +11,7 @@ def question():
         r.adjust_for_ambient_noise(source, duration=1)
 
     try:
+
         text = r.recognize_google(audio)
         pass
     except sr.UnknownValueError:
@@ -21,6 +19,13 @@ def question():
     except sr.RequestError as e:
         print(f"Could not request results from Google Speech Recognition service;{0}".format(e))
     print(text)
+    if text =='wait':
+        time.sleep(600)
+        question()
+    if 'Wikipedia' in text:
+        wikisearch=wikipedia.summary(text)
+        engine.say(wikisearch)
+        engine.runAndWait()
     if text=='what is your name':
         a='Im Ike, your personal assistant!'
         engine.say(a)
